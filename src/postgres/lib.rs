@@ -143,7 +143,7 @@ impl PostgresNoticeHandler for DefaultNoticeHandler {
 }
 
 /// Reasons a new Postgres connection could fail
-#[deriving(ToStr)]
+#[deriving(ToStr, Clone)]
 pub enum PostgresConnectError {
     /// The provided URL could not be parsed
     InvalidUrl,
@@ -169,7 +169,7 @@ pub enum PostgresConnectError {
 }
 
 /// Represents the position of an error in a query
-#[deriving(ToStr)]
+#[deriving(ToStr, Clone)]
 pub enum PostgresErrorPosition {
     /// A position in the original query
     Position(uint),
@@ -183,7 +183,7 @@ pub enum PostgresErrorPosition {
 }
 
 /// Encapsulates a Postgres error or notice.
-#[deriving(ToStr)]
+#[deriving(ToStr, Clone)]
 pub struct PostgresDbError {
     /// The field contents are ERROR, FATAL, or PANIC (in an error message),
     /// or WARNING, NOTICE, DEBUG, INFO, or LOG (in a notice message), or a
@@ -520,7 +520,7 @@ impl PostgresConnection {
     /// username if not specified.
     pub fn try_connect(url: &str) -> Result<PostgresConnection,
                                             PostgresConnectError> {
-        do InnerPostgresConnection::try_connect(url).map_move |conn| {
+        do InnerPostgresConnection::try_connect(url).map |&conn| {
             PostgresConnection {
                 conn: Cell::new(conn)
             }
@@ -1084,7 +1084,7 @@ impl<'self> Iterator<PostgresRow<'self>> for PostgresResult<'self> {
             self.execute();
         }
 
-        do self.data.pop_front().map_move |row| {
+        do self.data.pop_front().map |row| {
             PostgresRow {
                 stmt: self.stmt,
                 data: row

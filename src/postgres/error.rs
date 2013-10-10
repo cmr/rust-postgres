@@ -6,7 +6,7 @@ macro_rules! make_errors(
         // TODO: Get rid of this module when mozilla/rust#4375 is fixed
         pub mod hack {
             /// SQLSTATE error codes
-            #[deriving(ToStr, Eq)]
+            #[deriving(ToStr, Eq, Clone)]
             pub enum PostgresSqlState {
                 $($error,)+
                 UnknownSqlState(~str)

@@ -3,8 +3,8 @@
 
 use std::str;
 use std::rt::io::{Decorator, Reader, Writer};
-use std::rt::io::extensions::{ReaderUtil, ReaderByteConversions,
-                              WriterByteConversions};
+use std::rt::io::{ReaderUtil, ReaderByteConversions,
+                  WriterByteConversions};
 use std::rt::io::mem::{MemWriter, MemReader};
 use std::sys;
 use std::vec;
